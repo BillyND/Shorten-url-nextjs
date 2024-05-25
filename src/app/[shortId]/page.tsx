@@ -8,9 +8,13 @@ type ShortIdPageProps = {
 };
 
 export default async function ShortIdPage({ params }: ShortIdPageProps) {
-  const { shortId } = params;
+  let { shortId } = params;
 
-  if (shortId !== "undefined") {
+  try {
+    shortId = JSON.parse(shortId);
+  } catch (error) {}
+
+  if (shortId) {
     const shortUrl: any = await getShortUrl(shortId);
     return permanentRedirect(shortUrl);
   }
