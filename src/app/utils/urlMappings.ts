@@ -1,4 +1,4 @@
-import { nanoid } from "nanoid";
+import { v4 as uuidv4 } from "uuid";
 
 export interface UrlMapping {
   shortId: string;
@@ -20,15 +20,12 @@ function deleteUrlMapping(shortId: string): void {
   mappingUrls.delete(shortId);
 }
 
-function getAllUrlMappings(): UrlMapping[] {
-  return Array.from(mappingUrls, ([shortId, originalUrl]) => ({
-    shortId,
-    originalUrl,
-  }));
+function getAllUrlMappings(): Map<string, string> {
+  return mappingUrls;
 }
 
 function generateShortId(customAlias?: string): string {
-  return customAlias || nanoid(8);
+  return customAlias || uuidv4().slice(-8);
 }
 
 export const UrlMappings = {

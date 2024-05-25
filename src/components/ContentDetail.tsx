@@ -3,6 +3,7 @@
 import { Button, Flex, Form, FormProps, Input } from "antd";
 import { useState } from "react";
 import ResultShorter from "./ResultShorter";
+import { UrlMappings } from "@/app/utils/urlMappings";
 
 type FieldType = {
   originalUrl: string;
