@@ -1,14 +1,14 @@
 import ContentDetail from "@/components/ContentDetail";
 import FooterDetail from "@/components/FooterDetail";
 import HeaderDetail from "@/components/HeaderDetail";
-import { Layout } from "antd";
+import { Flex } from "antd";
 
 export default function Home() {
   return (
-    <Layout>
-      <HeaderDetail />
+    <Flex vertical>
+      {/* <HeaderDetail /> */}
       <ContentDetail />
       <FooterDetail />
-    </Layout>
+    </Flex>
   );
 }

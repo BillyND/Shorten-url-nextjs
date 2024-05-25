@@ -31,13 +31,14 @@ function HeaderDetail() {
         width: "100%",
         display: "flex",
         alignItems: "center",
+        background: "#fff",
       }}
     >
       <Menu
-        theme="dark"
+        theme="light"
         mode="horizontal"
         defaultSelectedKeys={["2"]}
-        items={items}
+        items={[]}
         style={{ flex: 1, minWidth: 0 }}
       />
     </Header>
