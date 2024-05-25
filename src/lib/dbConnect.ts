@@ -14,7 +14,6 @@ let cached: { conn?: Mongoose; promise?: Promise<Mongoose> } = {};
 
 async function dbConnect(): Promise<Db> {
   if (cached.conn) {
-    console.log("=> Using existing database connection");
     return cached.conn.connection.db;
   }
 

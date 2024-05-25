@@ -1,3 +1,4 @@
+import { urlsData } from "@/constants/app-scipt";
 import dbConnect from "@/lib/dbConnect";
 import Url from "@/models/Url";
 import { nanoid } from "nanoid";
@@ -16,7 +17,7 @@ type RequestPayload = {
  */
 export async function POST(req: NextRequest): Promise<NextResponse> {
   try {
-    await dbConnect();
+    // await dbConnect();
 
     // Parse the request body to get the payload
     const { originalUrl, customAlias }: RequestPayload = await req.json();
@@ -24,9 +25,13 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     const shorterUrl = `${req.nextUrl.protocol}//${req.nextUrl.host}/${id}`;
 
     // Check if the ID already exists
-    const existingUrl = await Url.findOne({ shortId: id });
+    const resExistingUrl: { originalUrl: string } = await fetch(
+      `${urlsData}?shortId=${id}`
+    ).then((res) => res.json());
 
-    if (existingUrl) {
+    console.log("===>resExistingUrl:", resExistingUrl);
+
+    if (resExistingUrl?.originalUrl) {
       // Return the response as JSON
       return NextResponse.json({
         message: "Custom alias already in use",
@@ -34,9 +39,14 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       });
     }
 
-    // Create a new URL mapping
-    const newUrl = new Url({ shortId: id, originalUrl });
-    await newUrl.save();
+    const resNewUrl: any = await fetch(`${urlsData}`, {
+      method: "post",
+      body: JSON.stringify({ shortId: id, originalUrl }),
+    }).then((res) => res.json());
+
+    // // Create a new URL mapping
+    // const newUrl = new Url({ shortId: id, originalUrl });
+    // await newUrl.save();
 
     // Return the response as JSON
     return NextResponse.json({

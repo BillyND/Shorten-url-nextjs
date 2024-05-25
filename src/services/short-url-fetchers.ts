@@ -1,11 +1,15 @@
+import { urlsData } from "@/constants/app-scipt";
 import dbConnect from "@/lib/dbConnect";
-import Url from "@/models/Url";
 import { cache } from "react";
 
 export const getShortUrl = cache(async (shortId: string) => {
-  await dbConnect();
+  // await dbConnect();
 
-  const urlDoc: any = await Url.findOne({ shortId });
+  const resExistingUrl: { originalUrl: string } = await fetch(
+    `${urlsData}?shortId=${shortId}`
+  ).then((res) => res.json());
 
-  return urlDoc?.originalUrl;
+  console.log("===>resExistingUrl:", resExistingUrl);
+
+  return resExistingUrl?.originalUrl;
 });

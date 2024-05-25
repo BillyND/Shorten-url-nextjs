@@ -1,3 +1,4 @@
+import { urlsData } from "@/constants/app-scipt";
 import Url from "@/models/Url";
 import { getShortUrl } from "@/services/short-url-fetchers";
 import { NextResponse, NextRequest } from "next/server";
@@ -16,10 +17,14 @@ export async function GET(
   const { id } = context.params;
 
   try {
-    const url: any = await getShortUrl(id);
+    const resExistingUrl: { originalUrl: string } = await fetch(
+      `${urlsData}?shortId=${id}`
+    ).then((res) => res.json());
 
-    if (url) {
-      return NextResponse.redirect(url);
+    console.log("===>resExistingUrl", resExistingUrl);
+
+    if (resExistingUrl?.originalUrl) {
+      return NextResponse.redirect(resExistingUrl?.originalUrl);
     }
 
     return NextResponse.json({ error: "URL not found" }, { status: 404 });
