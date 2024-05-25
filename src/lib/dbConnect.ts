@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 const MONGODB_URI: any = process.env.MONGODB_URI;
 
 if (!MONGODB_URI) {
-  throw new Error("Please add your Mongo URI to .env.local");
+  console.error("===> Please add your Mongo URI to .env.local");
 }
 
 let cached: { conn: any; promise: any } = { conn: null, promise: null };

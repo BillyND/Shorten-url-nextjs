@@ -2,8 +2,8 @@
 
 import { Button, Flex, Form, FormProps, Input, theme } from "antd";
 import { Content } from "antd/es/layout/layout";
-import ResultShorter from "./ResultShorter";
 import { useState } from "react";
+import ResultShorter from "./ResultShorter";
 
 type FieldType = {
   originalUrl: string;
