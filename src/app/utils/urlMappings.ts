@@ -20,8 +20,8 @@ function deleteUrlMapping(shortId: string): void {
   mappingUrls.delete(shortId);
 }
 
-function getAllUrlMappings(): Map<string, string> {
-  return mappingUrls;
+function getAllUrlMappings(): any {
+  return Array.from(mappingUrls);
 }
 
 function generateShortId(customAlias?: string): string {

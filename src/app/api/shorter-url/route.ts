@@ -32,6 +32,10 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         data: { shorterUrl: null },
       });
     }
+    console.log(
+      "===>UrlMappings.getAllUrlMappings():",
+      UrlMappings.getAllUrlMappings()
+    );
 
     fetch(`${urlsData}`, {
       method: "POST",
@@ -43,7 +47,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
     return NextResponse.json({
       message: "Done!",
-      data: { shorterUrl },
+      data: { shorterUrl, all: UrlMappings.getAllUrlMappings() },
     });
   } catch (error) {
     return NextResponse.json({ error: error }, { status: 400 });
