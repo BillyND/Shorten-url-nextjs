@@ -16,19 +16,22 @@ function ContentDetail() {
   } = theme.useToken();
 
   const [shorterUrl, setShorterUrl] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
 
   const onFinish: FormProps<FieldType>["onFinish"] = async (
     values: FieldType
   ) => {
+    setLoading(true);
+
     const resShorterUrl = await fetch("/api/shorter-url", {
       method: "POST",
       body: JSON.stringify(values),
-    }).then((res) => res.json());
+    })
+      .then((res) => res.json())
+      .catch(() => {});
 
     setShorterUrl(resShorterUrl?.data?.shorterUrl);
-
-    console.log("Success:", values);
-    console.log("===> resShorterUrl:", resShorterUrl);
+    setLoading(false);
   };
 
   const onFinishFailed: FormProps<FieldType>["onFinishFailed"] = (
@@ -75,7 +78,7 @@ function ContentDetail() {
 
           <Form.Item>
             <Flex justify="end">
-              <Button type="primary" htmlType="submit" danger>
+              <Button type="primary" htmlType="submit" danger loading={loading}>
                 Submit
               </Button>
             </Flex>
