@@ -1,22 +1,27 @@
-import mongoose from "mongoose";
-require("dotenv").config();
+import mongoose, { ConnectOptions, Mongoose } from "mongoose";
+import { Db } from "mongodb";
+import dotenv from "dotenv";
 
-const MONGODB_URI: any = process.env.MONGODB_URI;
+dotenv.config();
+
+const MONGODB_URI: string = process.env.MONGODB_URI || "";
 
 if (!MONGODB_URI) {
-  console.error("===> Please add your Mongo URI to .env.local");
+  throw new Error("Please add your Mongo URI to .env.local");
 }
 
-let cached: { conn: any; promise: any } = { conn: null, promise: null };
+let cached: { conn?: Mongoose; promise?: Promise<Mongoose> } = {};
 
-async function dbConnect() {
+async function bufferCommands(): Promise<Db> {
   if (cached.conn) {
-    console.log("===> Connected to DB");
-    return cached.conn;
+    console.log("=> Using existing database connection");
+    return cached.conn.connection.db;
   }
 
   if (!cached.promise) {
-    const opts = {
+    const opts: ConnectOptions = {
+      // useNewUrlParser: true,
+      // useUnifiedTopology: true,
       bufferCommands: false,
     };
 
@@ -26,7 +31,8 @@ async function dbConnect() {
   }
 
   cached.conn = await cached.promise;
-  return cached.conn;
+  console.log("=> New database connection");
+  return cached.conn.connection.db;
 }
 
 export default dbConnect;
