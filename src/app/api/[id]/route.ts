@@ -19,8 +19,8 @@ export async function GET(
   try {
     const url: any = await getShortUrl(id);
 
-    if (url && url.originalUrl) {
-      return NextResponse.redirect(url.originalUrl);
+    if (url) {
+      return NextResponse.redirect(url);
     }
 
     return NextResponse.json({ error: "URL not found" }, { status: 404 });
