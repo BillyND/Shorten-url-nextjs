@@ -21,7 +21,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     // Parse the request body to get the payload
     const { originalUrl, customAlias }: RequestPayload = await req.json();
     const id = customAlias || nanoid(8);
-    const shorterUrl = `${req.nextUrl.protocol}//${req.nextUrl.host}/api/${id}`;
+    const shorterUrl = `${req.nextUrl.protocol}//${req.nextUrl.host}/${id}`;
 
     // Check if the ID already exists
     const existingUrl = await Url.findOne({ shortId: id });

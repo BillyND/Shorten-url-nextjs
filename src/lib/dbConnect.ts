@@ -1,4 +1,3 @@
-// src/lib/dbConnect.ts
 import mongoose from "mongoose";
 
 const MONGODB_URI: any = process.env.MONGODB_URI;

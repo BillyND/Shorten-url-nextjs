@@ -1,5 +1,6 @@
 import dbConnect from "@/lib/dbConnect";
 import Url from "@/models/Url";
+import { getShortUrl } from "@/services/short-url-fetchers";
 import { NextResponse, NextRequest } from "next/server";
 
 /**
@@ -16,14 +17,13 @@ export async function GET(
   const { id } = context.params;
 
   try {
-    await dbConnect();
-    const url = await Url.findOne({ shortId: id });
+    const url: any = await getShortUrl(id);
 
     if (url && url.originalUrl) {
       return NextResponse.redirect(url.originalUrl);
-    } else {
-      return NextResponse.json({ error: "URL not found" }, { status: 404 });
     }
+
+    return NextResponse.json({ error: "URL not found" }, { status: 404 });
   } catch (error) {
     console.error(error);
     return NextResponse.json(
