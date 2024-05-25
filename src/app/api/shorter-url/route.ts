@@ -1,3 +1,5 @@
+import dbConnect from "@/lib/dbConnect";
+import Url from "@/models/Url";
 import { nanoid } from "nanoid";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -6,26 +8,35 @@ type RequestPayload = {
   customAlias: string;
 };
 
-export const urlMappings = new Map<any, any>();
-
-// This function handles POST requests for processing URLs.
-export async function POST(req: NextRequest) {
+/**
+ * Handles POST requests for processing URLs.
+ *
+ * @param {NextRequest} req - The request object from Next.js.
+ * @returns {Promise<NextResponse>} - The response object.
+ */
+export async function POST(req: NextRequest): Promise<NextResponse> {
   try {
+    await dbConnect();
+
     // Parse the request body to get the payload
     const { originalUrl, customAlias }: RequestPayload = await req.json();
-
     const id = customAlias || nanoid(8);
-    let shorterUrl: any = `${req.nextUrl.protocol}//${req.nextUrl.host}/api/${id}`;
+    const shorterUrl = `${req.nextUrl.protocol}//${req.nextUrl.host}/api/${id}`;
 
-    if (urlMappings.has(id)) {
+    // Check if the ID already exists
+    const existingUrl = await Url.findOne({ shortId: id });
+
+    if (existingUrl) {
       // Return the response as JSON
       return NextResponse.json({
-        message: "Done!",
+        message: "Custom alias already in use",
         data: { shorterUrl: null },
       });
     }
 
-    urlMappings.set(id, originalUrl);
+    // Create a new URL mapping
+    const newUrl = new Url({ shortId: id, originalUrl });
+    await newUrl.save();
 
     // Return the response as JSON
     return NextResponse.json({

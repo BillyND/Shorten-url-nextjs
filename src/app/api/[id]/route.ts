@@ -1,5 +1,6 @@
+import dbConnect from "@/lib/dbConnect";
+import Url from "@/models/Url";
 import { NextResponse, NextRequest } from "next/server";
-import { urlMappings } from "../shorter-url/route";
 
 /**
  * Handle GET requests to retrieve the original URL based on the shortened URL ID.
@@ -14,14 +15,20 @@ export async function GET(
 ): Promise<NextResponse> {
   const { id } = context.params;
 
-  // Remove leading slash and find the original URL
-  const originalUrl = urlMappings.get(id);
+  try {
+    await dbConnect();
+    const url = await Url.findOne({ shortId: id });
 
-  console.log("===>urlMappings:", urlMappings);
-
-  if (originalUrl) {
-    return NextResponse.redirect(originalUrl);
-  } else {
-    return NextResponse.json({ error: "URL not found" }, { status: 404 });
+    if (url && url.originalUrl) {
+      return NextResponse.redirect(url.originalUrl);
+    } else {
+      return NextResponse.json({ error: "URL not found" }, { status: 404 });
+    }
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
   }
 }
