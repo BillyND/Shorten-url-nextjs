@@ -1,0 +1,17 @@
+body {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.form-content {
+  width: 100%;
+  max-width: 500px;
+}
+
+.content-detail {
+  padding: 16px;
+  min-height: calc(100dvh - 130px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

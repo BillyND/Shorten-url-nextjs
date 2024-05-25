@@ -1,3 +1,14 @@
+import ContentDetail from "@/components/ContentDetail";
+import FooterDetail from "@/components/FooterDetail";
+import HeaderDetail from "@/components/HeaderDetail";
+import { Layout } from "antd";
+
 export default function Home() {
-  return <div>hello world</div>;
+  return (
+    <Layout>
+      <HeaderDetail />
+      <ContentDetail />
+      <FooterDetail />
+    </Layout>
+  );
 }
