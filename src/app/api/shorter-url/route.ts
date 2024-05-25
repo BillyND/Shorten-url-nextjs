@@ -6,7 +6,7 @@ type RequestPayload = {
   customAlias: string;
 };
 
-export const urlMappings = new Map<string, string>();
+export const urlMappings = new Map<any, any>();
 
 // This function handles POST requests for processing URLs.
 export async function POST(req: NextRequest) {
