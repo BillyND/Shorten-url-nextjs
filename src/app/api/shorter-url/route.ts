@@ -32,10 +32,6 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         data: { shorterUrl: null },
       });
     }
-    console.log(
-      "===>UrlMappings.getAllUrlMappings():",
-      UrlMappings.getAllUrlMappings()
-    );
 
     fetch(`${urlsData}`, {
       method: "POST",
