@@ -20,18 +20,18 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     const shorterUrl = `${req.nextUrl.protocol}//${req.nextUrl.host}/${id}`;
 
     // Check if the ID already exists
-    // const existingUrl = await fetch(`${urlsData}?shortId=${id}`).then((res) =>
-    //   res.json()
-    // );
+    const existingUrl = await fetch(`${urlsData}?shortId=${id}`).then((res) =>
+      res.json()
+    );
 
     UrlMappings.addUrlMapping(id, originalUrl);
 
-    // if (existingUrl?.originalUrl) {
-    //   return NextResponse.json({
-    //     message: "Custom alias already in use",
-    //     data: { shorterUrl: null },
-    //   });
-    // }
+    if (existingUrl?.originalUrl) {
+      return NextResponse.json({
+        message: "Custom alias already in use",
+        data: { shorterUrl: null },
+      });
+    }
 
     fetch(`${urlsData}`, {
       method: "POST",
