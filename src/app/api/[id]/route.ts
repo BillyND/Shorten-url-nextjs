@@ -1,7 +1,6 @@
-import { urlsData } from "@/constants/app-scipt";
-import Url from "@/models/Url";
-import { getShortUrl } from "@/services/short-url-fetchers";
-import { NextResponse, NextRequest } from "next/server";
+import { UrlMappings } from "@/app/utils/urlMappings";
+import { urlsData } from "@/constants/app-script";
+import { NextRequest, NextResponse } from "next/server";
 
 /**
  * Handle GET requests to retrieve the original URL based on the shortened URL ID.
@@ -12,19 +11,25 @@ import { NextResponse, NextRequest } from "next/server";
  */
 export async function GET(
   req: NextRequest,
-  context: { params: { id: string } }
+  { params: { id } }: { params: { id: string } }
 ): Promise<NextResponse> {
-  const { id } = context.params;
-
   try {
-    const resExistingUrl: { originalUrl: string } = await fetch(
-      `${urlsData}?shortId=${id}`
-    ).then((res) => res.json());
+    const cachedUrl = UrlMappings.getUrlMapping(id)?.originalUrl;
 
-    console.log("===>resExistingUrl", resExistingUrl);
+    if (cachedUrl) {
+      return NextResponse.redirect(cachedUrl);
+    }
 
-    if (resExistingUrl?.originalUrl) {
-      return NextResponse.redirect(resExistingUrl?.originalUrl);
+    const response = await fetch(`${urlsData}?shortId=${id}`);
+
+    if (!response.ok) {
+      return NextResponse.json({ error: "URL not found" }, { status: 404 });
+    }
+
+    const { originalUrl } = await response.json();
+
+    if (originalUrl) {
+      return NextResponse.redirect(originalUrl);
     }
 
     return NextResponse.json({ error: "URL not found" }, { status: 404 });
