@@ -39,8 +39,11 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       });
     }
 
-    const resNewUrl: any = await fetch(`${urlsData}`, {
+    await fetch(`${urlsData}`, {
       method: "post",
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify({ shortId: id, originalUrl }),
     }).then((res) => res.json());
 
@@ -55,6 +58,6 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     });
   } catch (error) {
     // Handle any errors that occur
-    return NextResponse.json({ error: "Invalid request" }, { status: 400 });
+    return NextResponse.json({ error: error }, { status: 400 });
   }
 }
