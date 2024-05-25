@@ -1,37 +1,46 @@
 "use client";
 
-import { Button, Flex, Form, Input, Tag, theme } from "antd";
+import { Button, Flex, Form, FormProps, Input, theme } from "antd";
 import { Content } from "antd/es/layout/layout";
-import React from "react";
+import ResultShorter from "./ResultShorter";
+import { useState } from "react";
 
-type RequiredMark = boolean | "optional" | "customize";
-
-const customizeRequiredMark = (
-  label: React.ReactNode,
-  { required }: { required: boolean }
-) => (
-  <>
-    {required ? (
-      <Tag color="error">Required</Tag>
-    ) : (
-      <Tag color="warning">optional</Tag>
-    )}
-    {label}
-  </>
-);
+type FieldType = {
+  originalUrl: string;
+  customAlias?: string;
+};
 
 function ContentDetail() {
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
 
-  const [form] = Form.useForm();
+  const [shorterUrl, setShorterUrl] = useState<string>("");
 
-  console.log("===>form:", form);
+  const onFinish: FormProps<FieldType>["onFinish"] = async (
+    values: FieldType
+  ) => {
+    const resShorterUrl = await fetch("/api/shorter-url", {
+      method: "POST",
+      body: JSON.stringify(values),
+    }).then((res) => res.json());
+
+    setShorterUrl(resShorterUrl?.data?.shorterUrl);
+
+    console.log("Success:", values);
+    console.log("===> resShorterUrl:", resShorterUrl);
+  };
+
+  const onFinishFailed: FormProps<FieldType>["onFinishFailed"] = (
+    errorInfo
+  ) => {
+    console.log("Failed:", errorInfo);
+  };
 
   return (
     <Content>
       <Flex
+        vertical
         className="content-detail"
         justify="center"
         align="center"
@@ -40,23 +49,40 @@ function ContentDetail() {
           borderRadius: borderRadiusLG,
         }}
       >
-        <Form className="form-content" form={form} layout="vertical">
-          <Form.Item label="URL" required tooltip="This is a required field">
-            <Input size="large" placeholder="Input url" />
+        <Form
+          className="form-content"
+          layout="vertical"
+          onFinish={onFinish}
+          onFinishFailed={onFinishFailed}
+          autoComplete="off"
+        >
+          <Form.Item<FieldType>
+            label="URL"
+            name="originalUrl"
+            rules={[
+              { required: true, message: "URL does not have a valid format" },
+            ]}
+          >
+            <Input size="large" />
           </Form.Item>
 
-          <Form.Item label="Custom Alias (Optional)">
-            <Input size="large" placeholder="Input custom Alias" />
+          <Form.Item<FieldType>
+            label="Custom Alias (Optional)"
+            name="customAlias"
+          >
+            <Input size="large" />
           </Form.Item>
 
           <Form.Item>
             <Flex justify="end">
-              <Button type="primary" danger>
+              <Button type="primary" htmlType="submit" danger>
                 Submit
               </Button>
             </Flex>
           </Form.Item>
         </Form>
+
+        <ResultShorter shorterUrl={shorterUrl} />
       </Flex>
     </Content>
   );
