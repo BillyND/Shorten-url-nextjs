@@ -10,8 +10,6 @@ if (!MONGODB_URI) {
 let cached: { conn: any; promise: any } = { conn: null, promise: null };
 
 async function dbConnect() {
-  console.log("===>MONGODB_URI:", MONGODB_URI);
-
   if (cached.conn) {
     console.log("===> Connected to DB");
     return cached.conn;
