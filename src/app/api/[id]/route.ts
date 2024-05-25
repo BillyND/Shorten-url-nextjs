@@ -1,7 +1,5 @@
-import dbConnect from "@/lib/dbConnect";
-import Url from "@/models/Url";
 import { getShortUrl } from "@/services/short-url-fetchers";
-import { NextResponse, NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 /**
  * Handle GET requests to retrieve the original URL based on the shortened URL ID.
@@ -15,6 +13,7 @@ export async function GET(
   context: { params: { id: string } }
 ): Promise<NextResponse> {
   const { id } = context.params;
+  return NextResponse.json({ error: "URL not found" }, { status: 404 });
 
   try {
     const url: any = await getShortUrl(id);
