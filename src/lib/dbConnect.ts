@@ -12,7 +12,7 @@ if (!MONGODB_URI) {
 
 let cached: { conn?: Mongoose; promise?: Promise<Mongoose> } = {};
 
-async function bufferCommands(): Promise<Db> {
+async function dbConnect(): Promise<Db> {
   if (cached.conn) {
     console.log("=> Using existing database connection");
     return cached.conn.connection.db;
