@@ -1,8 +1,9 @@
 "use client";
 
-import { Button, Flex, Form, FormProps, Input } from "antd";
+import { Button, Flex, Form, FormProps, Input, message } from "antd";
 import { useState } from "react";
 import ResultShorter from "./ResultShorter";
+import { useTranslation } from "react-i18next";
 
 type FieldType = {
   originalUrl: string;
@@ -12,27 +13,29 @@ type FieldType = {
 function ContentDetail() {
   const [shorterUrl, setShorterUrl] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
+  const { t } = useTranslation();
 
-  const onFinish: FormProps<FieldType>["onFinish"] = async (
-    values: FieldType
-  ) => {
+  message.config({
+    maxCount: 3,
+  });
+
+  const onFinish: FormProps<FieldType>["onFinish"] = async (values) => {
     setLoading(true);
 
-    const resShorterUrl = await fetch("/api/shorter-url", {
-      method: "POST",
-      body: JSON.stringify(values),
-    })
-      .then((res) => res.json())
-      .catch(() => {});
+    try {
+      const res = await fetch("/api/shorter-url", {
+        method: "POST",
+        body: JSON.stringify(values),
+      })
+        .then((res) => res.json())
+        .catch(() => {});
 
-    setShorterUrl(resShorterUrl?.data?.shorterUrl);
+      setShorterUrl(res?.data?.shorterUrl);
+    } catch (error) {
+      message.error(t("api_error_message"));
+    }
+
     setLoading(false);
-  };
-
-  const onFinishFailed: FormProps<FieldType>["onFinishFailed"] = (
-    errorInfo
-  ) => {
-    console.log("Failed:", errorInfo);
   };
 
   return (
@@ -41,21 +44,21 @@ function ContentDetail() {
         className="form-content"
         layout="vertical"
         onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
         autoComplete="off"
       >
         <Form.Item<FieldType>
-          label="URL"
+          label={t("url")}
           name="originalUrl"
           rules={[
-            { required: true, message: "URL does not have a valid format" },
+            { required: true, message: t("url_invalid_format") },
+            { type: "url", message: t("url_invalid_format") },
           ]}
         >
           <Input size="large" />
         </Form.Item>
 
         <Form.Item<FieldType>
-          label="Custom Alias (Optional)"
+          label={t("custom_alias_label")}
           name="customAlias"
         >
           <Input size="large" />
@@ -63,8 +66,8 @@ function ContentDetail() {
 
         <Form.Item>
           <Flex justify="end">
-            <Button type="primary" htmlType="submit" danger loading={loading}>
-              Submit
+            <Button type="primary" htmlType="submit" loading={loading}>
+              {t("submit_form_shorter_url")}
             </Button>
           </Flex>
         </Form.Item>

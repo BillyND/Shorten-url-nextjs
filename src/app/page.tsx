@@ -2,7 +2,7 @@ import ContentDetail from "@/components/ContentDetail";
 import FooterDetail from "@/components/FooterDetail";
 import HeaderDetail from "@/components/HeaderDetail";
 import dbConnect from "@/lib/dbConnect";
-import { Flex } from "antd";
+import { Flex, message } from "antd";
 
 // Ensure database connection when the application starts
 dbConnect();

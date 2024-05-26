@@ -1,0 +1,7 @@
+{
+  "custom_alias_label": "Custom Alias (Optional)",
+  "url_invalid_format": "URL does not have a valid format",
+  "url": "Url",
+  "submit_form_shorter_url": "Submit",
+  "api_error_message": "An error occurred while processing your request. Please try again later."
+}
