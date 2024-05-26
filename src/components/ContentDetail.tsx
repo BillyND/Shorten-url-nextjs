@@ -4,6 +4,7 @@ import { Button, Flex, Form, FormProps, Input, message } from "antd";
 import { useState } from "react";
 import ResultShorter from "./ResultShorter";
 import { useTranslation } from "react-i18next";
+import BannerApp from "./BannerApp";
 
 type FieldType = {
   originalUrl: string;
@@ -39,7 +40,9 @@ function ContentDetail() {
   };
 
   return (
-    <Flex vertical className="content-detail" justify="center" align="center">
+    <Flex vertical className="content-detail" justify="start" align="center">
+      <BannerApp />
+
       <Form
         className="form-content"
         layout="vertical"

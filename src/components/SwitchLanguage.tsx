@@ -68,13 +68,16 @@ const SwitchLanguage = () => {
   return (
     <Suspense
       fallback={
-        <Skeleton.Button
-          className="skeleton-switch-lang"
-          active={true}
-          size={"small"}
-          shape={"round"}
-          block={false}
-        />
+        <Flex gap={8}>
+          <GlobalOutlined />
+          <Skeleton.Button
+            className="skeleton-switch-lang"
+            active={true}
+            size={"small"}
+            shape={"round"}
+            block={false}
+          />
+        </Flex>
       }
     >
       <SwitchLanguageComponent />
