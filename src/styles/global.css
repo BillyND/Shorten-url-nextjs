@@ -96,7 +96,6 @@ body {
   max-width: calc(var(--max-width-content) - 2 * var(--padding-result-shorter));
   background-color: #fff;
   border-radius: 6px;
-  margin: 16px;
   padding: 16px;
   box-sizing: border-box !important;
   border: 0.01px dashed var(--color-border);
