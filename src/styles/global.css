@@ -1,54 +1,33 @@
 :root {
-  --body-font-size: 16px;
-  --body-background-gradient: linear-gradient(
+  --font-size-body: 16px;
+  --background-gradient-body: linear-gradient(
     to right,
     #fde4e5 0%,
     #cdfaf1 90%
   );
-  --content-padding: 0 16px;
-  --body-min-height: 100dvh;
-  --content-detail-height: calc(100dvh - 130px);
-  --max-content-width: 500px;
-  --sticky-header-bg: transparent;
-  --switch-language-bg: #6fc06f;
-  --dropdown-trigger-height: 30px;
-  --logo-app-color: #e11d48;
+  --padding-content: 0 16px;
+  --min-height-body: 100dvh;
+  --height-content-detail: calc(100dvh - 130px);
+  --max-width-content: 500px;
+  --background-sticky-header: transparent;
+  --background-switch-language: #6fc06f;
+  --height-dropdown-trigger: 30px;
+  --color-logo-app: #e11d48;
   --padding-result-shorter: 16px;
+  --color-success-text: #15803d;
+  --background-success: #dcfce7;
+  --color-character-text: #64748b;
+  --color-url-result: red;
+  --color-url-result-hover: rgb(200, 47, 47);
+  --color-border: gray;
 }
 
 body {
   padding: 0 !important;
   margin: 0 !important;
-  font-size: var(--body-font-size);
-  min-height: var(--body-min-height);
-  background-image: var(--body-background-gradient);
-}
-
-.sticky-header {
-  background-image: var(--body-background-gradient) !important;
-  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-}
-
-.ant-dropdown-trigger,
-.ant-menu-horizontal {
-  border: none !important;
-}
-
-.form-content {
-  width: 100%;
-  max-width: var(--max-content-width);
-}
-
-.content-detail {
-  padding: var(--content-padding);
-  min-height: var(--content-detail-height) !important;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.width-100-per {
-  width: 100%;
+  font-size: var(--font-size-body);
+  min-height: var(--min-height-body);
+  background-image: var(--background-gradient-body);
 }
 
 .sticky-header {
@@ -59,21 +38,45 @@ body {
   display: flex;
   align-items: center;
   padding: 0 !important;
+  background-image: var(--background-gradient-body) !important;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+.ant-dropdown-trigger,
+.ant-menu-horizontal {
+  border: none !important;
 }
 
 .ant-dropdown-trigger {
-  height: var(--dropdown-trigger-height);
+  height: var(--height-dropdown-trigger);
   cursor: pointer;
+}
+
+.form-content {
+  width: 100%;
+  max-width: var(--max-width-content);
+}
+
+.content-detail {
+  padding: var(--padding-content);
+  min-height: var(--height-content-detail) !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.width-100-per {
+  width: 100%;
 }
 
 .switch-language {
   margin: 0 20px !important;
   margin-left: 0 !important;
-  background-color: var(--switch-language-bg) !important;
+  background-color: var(--background-switch-language) !important;
 }
 
 .logo-shorter-url {
-  color: var(--logo-app-color);
+  color: var(--color-logo-app);
   font-size: 21px;
   font-weight: 900;
   padding-left: 20px;
@@ -90,17 +93,19 @@ body {
 
 .result-shorter-url {
   width: 100%;
-  max-width: calc(var(--max-content-width) - 2 * var(--padding-result-shorter));
+  max-width: calc(var(--max-width-content) - 2 * var(--padding-result-shorter));
   background-color: #fff;
   border-radius: 6px;
+  margin: 16px;
   padding: 16px;
-  border: 0.01px dashed gray;
+  box-sizing: border-box !important;
+  border: 0.01px dashed var(--color-border);
 }
 
 .message-success-shorter {
   padding: 16px;
-  color: #15803d;
-  background-color: #dcfce7;
+  color: var(--color-success-text);
+  background-color: var(--background-success);
   font-weight: 600;
   border-radius: 4px;
 }
@@ -110,26 +115,32 @@ body {
 }
 
 .url-result-shorted {
-  color: red;
+  color: var(--color-url-result);
   font-size: 14px;
   word-wrap: break-word;
-  max-width: 480px;
+  max-width: 439px;
 }
 
 .url-result-shorted:hover {
-  color: rgb(200, 47, 47);
+  color: var(--color-url-result-hover);
+}
+
+@media only screen and (max-width: 500px) {
+  .url-result-shorted {
+    max-width: calc(100vw - 64px);
+  }
 }
 
 .count-character-number {
   font-weight: 600;
-  color: #64748b;
+  color: var(--color-character-text);
   font-size: 14px;
 }
 
 .count-character-text {
   font-weight: 400;
   font-size: 14px;
-  color: #64748b;
+  color: var(--color-character-text);
 }
 
 #shorter-url-qrcode {

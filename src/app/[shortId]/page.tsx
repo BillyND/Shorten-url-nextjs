@@ -14,6 +14,8 @@ export default async function ShortIdPage({ params }: ShortIdPageProps) {
     shortId = JSON.parse(shortId);
   } catch (error) {}
 
+  console.log("===>shortId", !!shortId);
+
   if (shortId) {
     const shortUrl: any = await getShortUrl(shortId);
     return permanentRedirect(shortUrl);

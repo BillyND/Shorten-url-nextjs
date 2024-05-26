@@ -10,6 +10,7 @@ import {
 import { Button, Divider, Flex, QRCode } from "antd";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
+import QRCodeResize from "./QRCodeResize";
 
 function ResultShorter(props: { shorterUrl: string; originalUrl: string }) {
   const [isCopied, setIsCopied] = useState<boolean>(false);
@@ -77,15 +78,10 @@ function ResultShorter(props: { shorterUrl: string; originalUrl: string }) {
 
       <Divider />
 
-      <Flex justify="space-between">
-        <Flex vertical gap={8}>
+      <Flex justify="space-between" wrap="wrap" gap={8}>
+        <Flex vertical gap={10}>
           <b>{t("new_url_label")}</b>
-          <a
-            className="url-result-shorted"
-            href={shorterUrl}
-            target="_blank"
-            style={{ wordWrap: "break-word", maxWidth: "340px" }}
-          >
+          <a className="url-result-shorted" href={shorterUrl} target="_blank">
             {shorterUrl} <ExportOutlined />
           </a>
 
@@ -115,9 +111,13 @@ function ResultShorter(props: { shorterUrl: string; originalUrl: string }) {
       <Divider />
 
       <Flex id="shorter-url-qrcode" vertical gap={4}>
-        <QRCode size={260} value={shorterUrl || "-"} />
+        <QRCodeResize shorterUrl={shorterUrl} />
+        {/* <QRCode
+          size={Math.max(260, window.innerWidth - 128)}
+          value={shorterUrl || "-"}
+        /> */}
 
-        <Button type="primary" danger onClick={downloadQRCode}>
+        <Button size="small" type="primary" danger onClick={downloadQRCode}>
           <CloudDownloadOutlined /> {t("save")}
         </Button>
       </Flex>

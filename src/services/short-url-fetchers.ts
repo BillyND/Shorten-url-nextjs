@@ -13,14 +13,14 @@ export const getShortUrl = async (shortId: string): Promise<string | null> => {
     await dbConnect();
 
     // Check the in-memory cache first
-    const cachedUrl = UrlMappings.getUrlMapping(shortId)?.originalUrl;
+    const cachedUrl = UrlMappings.getUrlMapping(shortId);
 
-    if (cachedUrl) {
-      return cachedUrl;
+    if (cachedUrl.originalUrl) {
+      return cachedUrl.originalUrl || null;
     }
 
     // If not in cache, query the database
-    const existingUrl = await Url.findOne({ shortId }).lean();
+    const existingUrl = await Url.findOne({ shortId }).exec();
 
     if (existingUrl) {
       const { originalUrl } = existingUrl;

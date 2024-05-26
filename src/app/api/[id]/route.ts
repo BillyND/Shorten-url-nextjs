@@ -1,5 +1,4 @@
 import { UrlMappings } from "@/app/utils/urlMappings";
-import { urlsData } from "@/constants/app-script";
 import dbConnect from "@/lib/dbConnect";
 import Url from "@/models/Url";
 import { NextRequest, NextResponse } from "next/server";
@@ -18,46 +17,25 @@ export async function GET(
   try {
     await dbConnect();
 
-    const cachedUrl = UrlMappings.getUrlMapping(id)?.originalUrl;
+    // Check cache for URL mapping
+    const cachedUrl = UrlMappings.getUrlMapping(id);
 
     if (cachedUrl) {
-      return NextResponse.redirect(cachedUrl);
+      return NextResponse.redirect(cachedUrl.originalUrl);
     }
 
-    const existingUrl: any = await Url.findOne({ shortId: id });
+    // Retrieve URL from database
+    const existingUrl = await Url.findOne({ shortId: id }).exec();
 
-    // const response = await fetch(`${urlsData}?shortId=${id}`);
-
-    // if (!response.ok) {
-    //   return NextResponse.json({ error: "URL not found" }, { status: 404 });
-    // }
-
-    // const { originalUrl } = await response.json();
-
-    const { originalUrl } = existingUrl;
-
-    if (originalUrl) {
-      return NextResponse.redirect(originalUrl);
+    if (existingUrl?.originalUrl) {
+      return NextResponse.redirect(existingUrl.originalUrl);
     }
 
+    // URL not found response
     return NextResponse.json({ error: "URL not found" }, { status: 404 });
   } catch (error) {
-    const response = await fetch(`${urlsData}?shortId=${id}`);
+    console.error("Error fetching URL:", error);
 
-    if (!response.ok) {
-      return NextResponse.json({ error: "URL not found" }, { status: 404 });
-    }
-
-    const { originalUrl } = await response.json();
-
-    if (originalUrl) {
-      return NextResponse.redirect(originalUrl);
-    }
-
-    console.error(error);
-    return NextResponse.json(
-      { error: "Internal Server Error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error, success: false }, { status: 500 });
   }
 }
