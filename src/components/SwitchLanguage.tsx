@@ -3,8 +3,10 @@
 import React, { Suspense, useEffect, useState } from "react";
 import i18n from "@/i18n";
 import { GlobalOutlined } from "@ant-design/icons";
-import { Flex, Switch } from "antd";
+import { Flex, Skeleton, Switch } from "antd";
 import { useRouter, useSearchParams } from "next/navigation";
+import { debounce } from "@/lib/debounce";
+import { TIME_DELAY_SWITCH_LANGUAGE } from "@/constants/language";
 
 // Define language constants
 const LANGUAGES = {
@@ -32,9 +34,12 @@ const SwitchLanguageComponent = () => {
   };
 
   useEffect(() => {
-    if (lang && lang !== currentLanguage) {
+    if (lang) {
       setLanguage(lang as Language);
+      return;
     }
+
+    setLanguage(LANGUAGES.EN);
   }, [lang]);
 
   const handleSwitchLanguage = () => {
@@ -61,7 +66,17 @@ const SwitchLanguageComponent = () => {
 
 const SwitchLanguage = () => {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense
+      fallback={
+        <Skeleton.Button
+          className="skeleton-switch-lang"
+          active={true}
+          size={"small"}
+          shape={"round"}
+          block={false}
+        />
+      }
+    >
       <SwitchLanguageComponent />
     </Suspense>
   );

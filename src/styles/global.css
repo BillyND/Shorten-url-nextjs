@@ -79,3 +79,11 @@ body {
   padding-left: 20px;
   cursor: pointer;
 }
+
+.skeleton-switch-lang {
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  margin-right: 10px;
+  width: fit-content !important;
+}
