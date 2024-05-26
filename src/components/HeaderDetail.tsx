@@ -6,41 +6,30 @@ import {
   VideoCameraOutlined,
 } from "@ant-design/icons";
 
-import { Layout, Menu } from "antd";
+import { Flex, Layout, Menu } from "antd";
 import React from "react";
+import SwitchLanguage from "./SwitchLanguage";
 const { Header } = Layout;
 
 function HeaderDetail() {
-  const items = [
-    UserOutlined,
-    VideoCameraOutlined,
-    UploadOutlined,
-    UserOutlined,
-  ].map((icon, index) => ({
-    key: String(index + 1),
-    icon: React.createElement(icon),
-    label: `nav ${index + 1}`,
-  }));
+  const items = [UserOutlined, VideoCameraOutlined, UploadOutlined].map(
+    (icon, index) => ({
+      key: String(index + 1),
+      icon: React.createElement(icon),
+      label: `nav ${index + 1}`,
+    })
+  );
 
   return (
-    <Header
-      style={{
-        position: "sticky",
-        top: 0,
-        zIndex: 1,
-        width: "100%",
-        display: "flex",
-        alignItems: "center",
-        background: "#fff",
-      }}
-    >
-      <Menu
-        theme="light"
-        mode="horizontal"
-        defaultSelectedKeys={["2"]}
-        items={[]}
-        style={{ flex: 1, minWidth: 0 }}
-      />
+    <Header className="sticky-header">
+      <Flex className="width-100-per" align="center">
+        <Menu
+          mode="horizontal"
+          items={items}
+          style={{ flex: 1, minWidth: 0 }}
+        />
+        <SwitchLanguage />
+      </Flex>
     </Header>
   );
 }

@@ -7,7 +7,7 @@ const MONGODB_URI: string = process.env.MONGODB_URI || "";
 const isLocalDtb = MONGODB_URI?.includes("localhost");
 
 if (!MONGODB_URI) {
-  throw new Error("Please add your Mongo URI to .env.local");
+  console.error("===> Please add your Mongo URI to .env.local");
 }
 
 let cached: { conn?: Mongoose; promise?: Promise<Mongoose> } = {};
