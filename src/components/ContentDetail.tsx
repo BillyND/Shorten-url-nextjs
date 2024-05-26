@@ -47,18 +47,22 @@ function ContentDetail() {
         autoComplete="off"
       >
         <Form.Item<FieldType>
-          label={t("url")}
+          label={<b>{t("url")}</b>}
           name="originalUrl"
           rules={[
-            { required: true, message: t("url_invalid_format") },
-            { type: "url", message: t("url_invalid_format") },
+            {
+              required: true,
+              message: "",
+            },
+            { type: "url", message: "" },
           ]}
         >
           <Input size="large" />
+          <span>oki</span>
         </Form.Item>
 
         <Form.Item<FieldType>
-          label={t("custom_alias_label")}
+          label={<b>{t("custom_alias_label")}</b>}
           name="customAlias"
         >
           <Input size="large" />
@@ -66,7 +70,7 @@ function ContentDetail() {
 
         <Form.Item>
           <Flex justify="end">
-            <Button type="primary" htmlType="submit" loading={loading}>
+            <Button type="primary" htmlType="submit" loading={loading} danger>
               {t("submit_form_shorter_url")}
             </Button>
           </Flex>

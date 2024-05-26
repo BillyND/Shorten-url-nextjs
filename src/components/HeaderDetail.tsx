@@ -23,11 +23,12 @@ function HeaderDetail() {
   return (
     <Header className="sticky-header">
       <Flex className="width-100-per" align="center">
-        <Menu
+        <div className="width-100-per"></div>
+        {/* <Menu
           mode="horizontal"
           items={items}
           style={{ flex: 1, minWidth: 0 }}
-        />
+        /> */}
         <SwitchLanguage />
       </Flex>
     </Header>
