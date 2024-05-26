@@ -3,17 +3,25 @@
 import {
   CheckCircleOutlined,
   CheckOutlined,
+  CloudDownloadOutlined,
   CopyOutlined,
   ExportOutlined,
 } from "@ant-design/icons";
-import { Button, Divider, Flex } from "antd";
-import { useState } from "react";
+import { Button, Divider, Flex, QRCode } from "antd";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 function ResultShorter(props: { shorterUrl: string; originalUrl: string }) {
   const [isCopied, setIsCopied] = useState<boolean>(false);
   const { shorterUrl, originalUrl } = props;
   const { t } = useTranslation();
+  const refBannerSuccess = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (refBannerSuccess.current) {
+      refBannerSuccess.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [shorterUrl]);
 
   if (!shorterUrl) return;
 
@@ -28,15 +36,33 @@ function ResultShorter(props: { shorterUrl: string; originalUrl: string }) {
     }, 1000);
   };
 
+  const downloadQRCode = () => {
+    const canvas = document
+      .getElementById("shorter-url-qrcode")
+      ?.querySelector<HTMLCanvasElement>("canvas");
+
+    if (canvas) {
+      const url = canvas.toDataURL();
+      const a = document.createElement("a");
+      a.download = "QRCode.png";
+      a.href = url;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+  };
+
   return (
     <Flex vertical className="result-shorter-url">
       <span className="message-success-shorter">
-        <Flex gap={8}>
+        <Flex gap={8} ref={refBannerSuccess}>
           <CheckCircleOutlined />
           {t("message_success_shorter_url")}
         </Flex>
       </span>
+
       <Divider />
+
       <Flex vertical gap={8}>
         <b>{t("old_url_label")}</b>
         <a className="url-result-shorted" href={originalUrl} target="_blank">
@@ -54,7 +80,12 @@ function ResultShorter(props: { shorterUrl: string; originalUrl: string }) {
       <Flex justify="space-between">
         <Flex vertical gap={8}>
           <b>{t("new_url_label")}</b>
-          <a className="url-result-shorted" href={shorterUrl} target="_blank">
+          <a
+            className="url-result-shorted"
+            href={shorterUrl}
+            target="_blank"
+            style={{ wordWrap: "break-word", maxWidth: "340px" }}
+          >
             {shorterUrl} <ExportOutlined />
           </a>
 
@@ -80,6 +111,18 @@ function ResultShorter(props: { shorterUrl: string; originalUrl: string }) {
           </Flex>
         </Button>
       </Flex>
+
+      <Divider />
+
+      <Flex id="shorter-url-qrcode" vertical gap={4}>
+        <QRCode size={260} value={shorterUrl || "-"} />
+
+        <Button type="primary" danger onClick={downloadQRCode}>
+          <CloudDownloadOutlined /> {t("save")}
+        </Button>
+      </Flex>
+
+      <Divider />
     </Flex>
   );
 }

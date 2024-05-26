@@ -24,12 +24,11 @@ body {
   background-image: var(--body-background-gradient);
 }
 
-.ant-menu-overflow,
 .sticky-header {
-  background: var(--sticky-header-bg) !important;
+  background-image: var(--body-background-gradient) !important;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
 
-.ant-menu-overflow,
 .ant-dropdown-trigger,
 .ant-menu-horizontal {
   border: none !important;
@@ -129,4 +128,9 @@ body {
   font-weight: 400;
   font-size: 14px;
   color: #64748b;
+}
+
+#shorter-url-qrcode {
+  max-width: 260px;
+  margin: auto;
 }
