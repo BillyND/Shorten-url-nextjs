@@ -17,7 +17,6 @@ const LANGUAGES = {
 type Language = (typeof LANGUAGES)[keyof typeof LANGUAGES];
 
 const SwitchLanguageComponent = () => {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const lang = searchParams.get("lang");
 
@@ -26,11 +25,16 @@ const SwitchLanguageComponent = () => {
   );
 
   // Change language and update URL
-  const setLanguage = (language: Language) => {
+  const setLanguage = (language: Language): void => {
+    const params = new URLSearchParams(window.location.search);
+    params.set("lang", language);
     i18n.changeLanguage(language);
-    const newParams = new URLSearchParams(searchParams.toString());
-    newParams.set("lang", language);
-    router.push(`?${newParams.toString()}`);
+
+    const newUrl = `${window.location.pathname}?${params.toString()}${
+      window.location.hash
+    }`;
+
+    window.history.pushState({}, "", newUrl);
   };
 
   useEffect(() => {
@@ -40,7 +44,7 @@ const SwitchLanguageComponent = () => {
     }
 
     setLanguage(LANGUAGES.EN);
-  }, [lang]);
+  }, []);
 
   const handleSwitchLanguage = () => {
     const newLanguage =
