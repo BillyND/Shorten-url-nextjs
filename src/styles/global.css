@@ -112,6 +112,8 @@ body {
 .url-result-shorted {
   color: red;
   font-size: 14px;
+  word-wrap: break-word;
+  max-width: 480px;
 }
 
 .url-result-shorted:hover {
@@ -133,4 +135,8 @@ body {
 #shorter-url-qrcode {
   max-width: 260px;
   margin: auto;
+}
+
+.banner-app {
+  padding: 20px 0;
 }

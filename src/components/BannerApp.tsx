@@ -8,7 +8,7 @@ function BannerApp() {
       height="203"
       viewBox="0 0 253 233"
       fill="none"
-      style={{ paddingBottom: "20px" }}
+      className="banner-app"
     >
       <g clip-path="url(#clip0_220_26)">
         <path
