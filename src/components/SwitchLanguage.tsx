@@ -1,13 +1,33 @@
 "use client";
 
-import { TIME_DELAY_SWITCH_LANGUAGE } from "@/constants/language";
-import { getCurrentLang, setCurrentLang } from "@/i18n";
-import { debounce } from "@/lib/debounce";
+import i18n from "@/i18n";
 import { GlobalOutlined } from "@ant-design/icons";
 import { Flex, Switch } from "antd";
 import { useState } from "react";
 
 const listLanguage: { [key: string]: string } = { vn: "vn", en: "en" };
+
+// Function to get the current language using localStorage
+export function getCurrentLang(): string {
+  if (localStorage) {
+    // Retrieve the language preference from localStorage
+    const storedLang = localStorage?.getItem("language");
+
+    // If the language preference exists in localStorage, return it
+    // Otherwise, return a default language ("en" for English)
+    return storedLang || "vn";
+  }
+
+  return "vn";
+}
+
+export function setCurrentLang(language: string): void {
+  if (localStorage) {
+    localStorage?.setItem("language", language);
+  }
+
+  i18n.changeLanguage(language);
+}
 
 function SwitchLanguage() {
   const [currentLanguageState, setCurrentLanguageState] = useState<string>(
