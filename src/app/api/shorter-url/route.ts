@@ -21,7 +21,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     const shorterUrl = `${req.nextUrl.protocol}//${req.nextUrl.host}/${id}`;
 
     // Check if the ID already exists
-    const existingUrl: any = await Url.find({ shortId: id });
+    const existingUrl: any = await Url.findOne({ shortId: id });
     // const existingUrl = await fetch(`${urlsData}?shortId=${id}`).then((res) =>
     //   res.json()
     // );
