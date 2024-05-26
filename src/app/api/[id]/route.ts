@@ -1,5 +1,6 @@
 import { UrlMappings } from "@/app/utils/urlMappings";
 import { urlsData } from "@/constants/app-script";
+import Url from "@/models/Url";
 import { NextRequest, NextResponse } from "next/server";
 
 /**
@@ -20,13 +21,17 @@ export async function GET(
       return NextResponse.redirect(cachedUrl);
     }
 
-    const response = await fetch(`${urlsData}?shortId=${id}`);
+    const existingUrl: any = await Url.findOne({ shortId: id });
 
-    if (!response.ok) {
-      return NextResponse.json({ error: "URL not found" }, { status: 404 });
-    }
+    // const response = await fetch(`${urlsData}?shortId=${id}`);
 
-    const { originalUrl } = await response.json();
+    // if (!response.ok) {
+    //   return NextResponse.json({ error: "URL not found" }, { status: 404 });
+    // }
+
+    // const { originalUrl } = await response.json();
+
+    const { originalUrl } = existingUrl;
 
     if (originalUrl) {
       return NextResponse.redirect(originalUrl);

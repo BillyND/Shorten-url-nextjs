@@ -1,5 +1,6 @@
 import { UrlMappings } from "@/app/utils/urlMappings";
 import { urlsData } from "@/constants/app-script";
+import Url from "@/models/Url";
 import { NextRequest, NextResponse } from "next/server";
 
 type RequestPayload = {
@@ -20,9 +21,10 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     const shorterUrl = `${req.nextUrl.protocol}//${req.nextUrl.host}/${id}`;
 
     // Check if the ID already exists
-    const existingUrl = await fetch(`${urlsData}?shortId=${id}`).then((res) =>
-      res.json()
-    );
+    const existingUrl: any = await Url.find({ shortId: id });
+    // const existingUrl = await fetch(`${urlsData}?shortId=${id}`).then((res) =>
+    //   res.json()
+    // );
 
     UrlMappings.addUrlMapping(id, originalUrl);
 
@@ -33,13 +35,17 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       });
     }
 
-    fetch(`${urlsData}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ shortId: id, originalUrl }),
-    }).then((res) => res.json());
+    const newUrl: any = new Url({ shortId: id, originalUrl });
+
+    await newUrl.save();
+
+    // fetch(`${urlsData}`, {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({ shortId: id, originalUrl }),
+    // }).then((res) => res.json());
 
     return NextResponse.json({
       message: "Done!",
