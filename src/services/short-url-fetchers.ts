@@ -12,19 +12,23 @@ export const getShortUrl = async (shortId: string): Promise<string | null> => {
   try {
     await dbConnect();
 
+    // Check the in-memory cache first
     const cachedUrl = UrlMappings.getUrlMapping(shortId)?.originalUrl;
 
     if (cachedUrl) {
-      return cachedUrl || null;
+      return cachedUrl;
     }
 
-    // const response = await fetch(`${urlsData}?shortId=${shortId}`);
-    // if (!response.ok) throw new Error("Failed to fetch URL mapping");
+    // If not in cache, query the database
+    const existingUrl = await Url.findOne({ shortId }).lean();
 
-    const existingUrl: any = await Url.findOne({ shortId });
+    if (existingUrl) {
+      const { originalUrl } = existingUrl;
+      return originalUrl || null;
+    }
 
-    const { originalUrl } = existingUrl;
-    return originalUrl || null;
+    // If not found in database, return null
+    return null;
   } catch (error) {
     console.error("Error fetching short URL:", error);
     return null;

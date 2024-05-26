@@ -1,9 +1,8 @@
 {
-  "custom_alias_label": "Custom Alias (Optional)",
+  "custom_alias_label": "Custom alias (Optional)",
   "url_invalid_format": "URL does not have a valid format",
   "url": "Url",
   "submit_form_shorter_url": "Submit",
-  "api_error_message": "An error occurred while processing your request. Please try again later.",
   "input_url_placeholder": "Enter the url",
   "input_custom_alias_placeholder": "Enter custom alias",
   "message_success_shorter_url": "Your new URL has been created successfully!",
@@ -12,5 +11,9 @@
   "character": "character",
   "copy": "Copy",
   "copied": "Copied",
-  "save": "Save"
+  "save": "Save",
+  "success_shorter_url": "Shortened url successfully!",
+  "custom_alias_already_used": "Custom alias already in use!",
+  "error_server": "Error server!",
+  "created_by": "Created by"
 }

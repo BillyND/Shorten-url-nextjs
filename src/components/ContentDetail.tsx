@@ -2,20 +2,22 @@
 
 import { Button, Flex, Form, FormProps, Input, message } from "antd";
 import { useState } from "react";
-import ResultShorter from "./ResultShorter";
 import { useTranslation } from "react-i18next";
 import BannerApp from "./BannerApp";
+import ResultShorter from "./ResultShorter";
 
 type FieldType = {
   originalUrl: string;
   customAlias?: string;
 };
 
-function ContentDetail() {
-  const [dataShorter, setDataShorter] = useState<{
-    originalUrl: string;
-    shorterUrl: string;
-  }>({
+type ShorterDataType = {
+  originalUrl: string;
+  shorterUrl: string;
+};
+
+const ContentDetail: React.FC = () => {
+  const [dataShorter, setDataShorter] = useState<ShorterDataType>({
     originalUrl: "",
     shorterUrl: "",
   });
@@ -32,22 +34,31 @@ function ContentDetail() {
     setDataShorter((prev) => ({ ...prev, originalUrl: values.originalUrl }));
 
     try {
-      const res = await fetch("/api/shorter-url", {
+      const response = await fetch("/api/shorter-url", {
         method: "POST",
         body: JSON.stringify(values),
-      })
-        .then((res) => res.json())
-        .catch(() => {});
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const resSubmitShortUrl = await response.json();
+      const { success, message: resMessage, data } = resSubmitShortUrl || {};
 
       setDataShorter((prev) => ({
         ...prev,
-        shorterUrl: res?.data?.shorterUrl,
+        shorterUrl: data?.shorterUrl || "",
       }));
-    } catch (error) {
-      message.error(t("api_error_message"));
-    }
 
-    setLoading(false);
+      if (!success) {
+        message.error(t(resMessage));
+      }
+    } catch (error) {
+      console.error("Error submitting short URL:", error);
+      message.error(t("error_server"));
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -94,11 +105,11 @@ function ContentDetail() {
       </Form>
 
       <ResultShorter
-        shorterUrl={dataShorter?.shorterUrl}
-        originalUrl={dataShorter?.originalUrl}
+        shorterUrl={dataShorter.shorterUrl}
+        originalUrl={dataShorter.originalUrl}
       />
     </Flex>
   );
-}
+};
 
 export default ContentDetail;
