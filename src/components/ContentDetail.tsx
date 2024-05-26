@@ -52,13 +52,12 @@ function ContentDetail() {
           rules={[
             {
               required: true,
-              message: "",
+              message: t("url_invalid_format"),
             },
-            { type: "url", message: "" },
+            { type: "url", message: t("url_invalid_format") },
           ]}
         >
           <Input size="large" />
-          <span>oki</span>
         </Form.Item>
 
         <Form.Item<FieldType>

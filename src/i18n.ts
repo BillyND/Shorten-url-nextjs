@@ -18,9 +18,9 @@ const resources: Record<string, Resources> = {
 
 // Function to get the current language using localStorage
 export function getCurrentLang(): string {
-  if (localStorage) {
+  if (window && window.localStorage) {
     // Retrieve the language preference from localStorage
-    const storedLang = localStorage?.getItem("language");
+    const storedLang = window.localStorage?.getItem("language");
 
     // If the language preference exists in localStorage, return it
     // Otherwise, return a default language ("en" for English)
@@ -31,8 +31,8 @@ export function getCurrentLang(): string {
 }
 
 export function setCurrentLang(language: string): void {
-  if (localStorage) {
-    localStorage?.setItem("language", language);
+  if (window && window.localStorage) {
+    window.localStorage?.setItem("language", language);
   }
 
   i18n.changeLanguage(language);
