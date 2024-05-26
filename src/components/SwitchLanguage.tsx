@@ -1,12 +1,10 @@
 "use client";
 
-import { TIME_DELAY_SWITCH_LANGUAGE } from "@/constants/language";
+import React, { Suspense, useEffect, useState } from "react";
 import i18n from "@/i18n";
-import { debounce } from "@/lib/debounce";
 import { GlobalOutlined } from "@ant-design/icons";
 import { Flex, Switch } from "antd";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
 
 // Define language constants
 const LANGUAGES = {
@@ -16,7 +14,7 @@ const LANGUAGES = {
 
 type Language = (typeof LANGUAGES)[keyof typeof LANGUAGES];
 
-const SwitchLanguage = () => {
+const SwitchLanguageComponent = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const lang = searchParams.get("lang");
@@ -26,29 +24,23 @@ const SwitchLanguage = () => {
   );
 
   // Change language and update URL
-  const setLanguage = debounce((language: Language) => {
-    console.log("===>language", language);
-
-    setCurrentLanguage(language);
+  const setLanguage = (language: Language) => {
     i18n.changeLanguage(language);
     const newParams = new URLSearchParams(searchParams.toString());
     newParams.set("lang", language);
     router.push(`?${newParams.toString()}`);
-  }, TIME_DELAY_SWITCH_LANGUAGE);
+  };
 
   useEffect(() => {
-    if (lang) {
+    if (lang && lang !== currentLanguage) {
       setLanguage(lang as Language);
-    }
-
-    if (!lang) {
-      setLanguage(LANGUAGES.EN);
     }
   }, [lang]);
 
   const handleSwitchLanguage = () => {
     const newLanguage =
       currentLanguage === LANGUAGES.VN ? LANGUAGES.EN : LANGUAGES.VN;
+    setCurrentLanguage(newLanguage);
     setLanguage(newLanguage);
   };
 
@@ -64,6 +56,14 @@ const SwitchLanguage = () => {
         defaultChecked
       />
     </Flex>
+  );
+};
+
+const SwitchLanguage = () => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SwitchLanguageComponent />
+    </Suspense>
   );
 };
 
