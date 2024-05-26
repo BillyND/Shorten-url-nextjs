@@ -4,11 +4,11 @@ function BannerApp() {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="253"
-      height="233"
+      width="223"
+      height="203"
       viewBox="0 0 253 233"
       fill="none"
-      style={{ paddingBottom: "40px", paddingTop: "40px" }}
+      style={{ paddingBottom: "20px" }}
     >
       <g clip-path="url(#clip0_220_26)">
         <path

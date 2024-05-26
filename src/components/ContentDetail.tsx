@@ -12,7 +12,14 @@ type FieldType = {
 };
 
 function ContentDetail() {
-  const [shorterUrl, setShorterUrl] = useState<string>("");
+  const [dataShorter, setDataShorter] = useState<{
+    originalUrl: string;
+    shorterUrl: string;
+  }>({
+    originalUrl: "",
+    shorterUrl: "",
+  });
+
   const [loading, setLoading] = useState<boolean>(false);
   const { t } = useTranslation();
 
@@ -22,6 +29,7 @@ function ContentDetail() {
 
   const onFinish: FormProps<FieldType>["onFinish"] = async (values) => {
     setLoading(true);
+    setDataShorter((prev) => ({ ...prev, originalUrl: values.originalUrl }));
 
     try {
       const res = await fetch("/api/shorter-url", {
@@ -31,7 +39,10 @@ function ContentDetail() {
         .then((res) => res.json())
         .catch(() => {});
 
-      setShorterUrl(res?.data?.shorterUrl);
+      setDataShorter((prev) => ({
+        ...prev,
+        shorterUrl: res?.data?.shorterUrl,
+      }));
     } catch (error) {
       message.error(t("api_error_message"));
     }
@@ -82,7 +93,10 @@ function ContentDetail() {
         </Form.Item>
       </Form>
 
-      <ResultShorter shorterUrl={shorterUrl} />
+      <ResultShorter
+        shorterUrl={dataShorter?.shorterUrl}
+        originalUrl={dataShorter?.originalUrl}
+      />
     </Flex>
   );
 }
