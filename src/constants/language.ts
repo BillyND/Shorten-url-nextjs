@@ -1,1 +1,1 @@
-export const TIME_DELAY_SWITCH_LANGUAGE = 100;
+export const TIME_DELAY_SWITCH_LANGUAGE = 50;

@@ -1,63 +1,70 @@
 "use client";
 
+import { TIME_DELAY_SWITCH_LANGUAGE } from "@/constants/language";
 import i18n from "@/i18n";
+import { debounce } from "@/lib/debounce";
 import { GlobalOutlined } from "@ant-design/icons";
 import { Flex, Switch } from "antd";
-import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
-const listLanguage: { [key: string]: string } = { vn: "vn", en: "en" };
+// Define language constants
+const LANGUAGES = {
+  VN: "vn",
+  EN: "en",
+} as const;
 
-// Function to get the current language using localStorage
-export function getCurrentLang(): string {
-  if (localStorage) {
-    // Retrieve the language preference from localStorage
-    const storedLang = localStorage?.getItem("language");
+type Language = (typeof LANGUAGES)[keyof typeof LANGUAGES];
 
-    // If the language preference exists in localStorage, return it
-    // Otherwise, return a default language ("en" for English)
-    return storedLang || "vn";
-  }
+const SwitchLanguage = () => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const lang = searchParams.get("lang");
 
-  return "vn";
-}
-
-export function setCurrentLang(language: string): void {
-  if (localStorage) {
-    localStorage?.setItem("language", language);
-  }
-
-  i18n.changeLanguage(language);
-}
-
-function SwitchLanguage() {
-  const [currentLanguageState, setCurrentLanguageState] = useState<string>(
-    getCurrentLang()
+  const [currentLanguage, setCurrentLanguage] = useState<Language | null>(
+    lang as Language
   );
 
-  const handleSwitchLanguage = (value: boolean) => {
-    console.log("===>value:", value);
-    const newLanguage =
-      currentLanguageState === listLanguage.vn
-        ? listLanguage.en
-        : listLanguage.vn;
+  // Change language and update URL
+  const setLanguage = debounce((language: Language) => {
+    console.log("===>language", language);
 
-    setCurrentLanguageState(newLanguage);
-    setCurrentLang(newLanguage);
+    setCurrentLanguage(language);
+    i18n.changeLanguage(language);
+    const newParams = new URLSearchParams(searchParams.toString());
+    newParams.set("lang", language);
+    router.push(`?${newParams.toString()}`);
+  }, TIME_DELAY_SWITCH_LANGUAGE);
+
+  useEffect(() => {
+    if (lang) {
+      setLanguage(lang as Language);
+    }
+
+    if (!lang) {
+      setLanguage(LANGUAGES.EN);
+    }
+  }, [lang]);
+
+  const handleSwitchLanguage = () => {
+    const newLanguage =
+      currentLanguage === LANGUAGES.VN ? LANGUAGES.EN : LANGUAGES.VN;
+    setLanguage(newLanguage);
   };
 
   return (
     <Flex gap={8}>
       <GlobalOutlined />
       <Switch
-        checked={currentLanguageState === listLanguage.vn}
+        checked={currentLanguage === LANGUAGES.VN}
         onChange={handleSwitchLanguage}
         className="switch-language"
-        checkedChildren={listLanguage.vn.toUpperCase()}
-        unCheckedChildren={listLanguage.en.toUpperCase()}
+        checkedChildren={LANGUAGES.VN.toUpperCase()}
+        unCheckedChildren={LANGUAGES.EN.toUpperCase()}
         defaultChecked
       />
     </Flex>
   );
-}
+};
 
 export default SwitchLanguage;

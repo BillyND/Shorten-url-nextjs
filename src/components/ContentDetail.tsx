@@ -57,14 +57,17 @@ function ContentDetail() {
             { type: "url", message: t("url_invalid_format") },
           ]}
         >
-          <Input size="large" />
+          <Input size="large" placeholder={t("input_url_placeholder")} />
         </Form.Item>
 
         <Form.Item<FieldType>
           label={<b>{t("custom_alias_label")}</b>}
           name="customAlias"
         >
-          <Input size="large" />
+          <Input
+            size="large"
+            placeholder={t("input_custom_alias_placeholder")}
+          />
         </Form.Item>
 
         <Form.Item>

@@ -23,7 +23,7 @@ function HeaderDetail() {
   return (
     <Header className="sticky-header">
       <Flex className="width-100-per" align="center">
-        <div className="width-100-per"></div>
+        <span className="width-100-per logo-shorter-url">ShorterUrls</span>
         {/* <Menu
           mode="horizontal"
           items={items}

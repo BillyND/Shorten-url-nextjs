@@ -4,7 +4,6 @@ import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import enTranslation from "./locales/en.json";
 import vnTranslation from "./locales/vn.json";
-import { getCurrentLang } from "./components/SwitchLanguage";
 
 // Define the type for translation resources
 interface Resources {
@@ -18,6 +17,11 @@ const resources: Record<string, Resources> = {
   en: { translation: enTranslation },
   vn: { translation: vnTranslation },
 };
+
+// Function to get the current language using localStorage
+export function getCurrentLang(): string {
+  return "en";
+}
 
 // Initialize i18next
 i18n.use(initReactI18next).init({

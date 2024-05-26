@@ -12,6 +12,7 @@
   --sticky-header-bg: transparent;
   --switch-language-bg: #6fc06f;
   --dropdown-trigger-height: 30px;
+  --logo-app-color: #e11d48;
 }
 
 body {
@@ -69,4 +70,12 @@ body {
   margin: 0 20px !important;
   margin-left: 0 !important;
   background-color: var(--switch-language-bg) !important;
+}
+
+.logo-shorter-url {
+  color: var(--logo-app-color);
+  font-size: 21px;
+  font-weight: 900;
+  padding-left: 20px;
+  cursor: pointer;
 }

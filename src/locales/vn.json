@@ -3,5 +3,7 @@
   "url_invalid_format": "URL không có định dạng hợp lệ",
   "url": "Đường dẫn",
   "submit_form_shorter_url": "Gửi",
-  "api_error_message": "Đã xảy ra lỗi khi xử lý yêu cầu của bạn. Vui lòng thử lại sau."
+  "api_error_message": "Đã xảy ra lỗi khi xử lý yêu cầu của bạn. Vui lòng thử lại sau.",
+  "input_url_placeholder": "Nhập url",
+  "input_custom_alias_placeholder": "Nhập bí danh tùy chỉnh"
 }
