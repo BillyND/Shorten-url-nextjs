@@ -82,7 +82,12 @@ const ContentDetail: React.FC = () => {
             { type: "url", message: t("url_invalid_format") },
           ]}
         >
-          <Input size="large" placeholder={t("input_url_placeholder")} />
+          <Input
+            size="large"
+            placeholder={t("input_url_placeholder")}
+            autoComplete="url"
+            spellCheck="false"
+          />
         </Form.Item>
 
         <Form.Item<FieldType>
@@ -90,7 +95,9 @@ const ContentDetail: React.FC = () => {
           name="customAlias"
         >
           <Input
+            autoComplete="on"
             size="large"
+            spellCheck="false"
             placeholder={t("input_custom_alias_placeholder")}
           />
         </Form.Item>
