@@ -1,5 +1,6 @@
 import { UrlMappings } from "@/app/utils/urlMappings";
 import { urlsData } from "@/constants/app-script";
+import dbConnect from "@/lib/dbConnect";
 import Url from "@/models/Url";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -15,18 +16,15 @@ type RequestPayload = {
  * @returns {Promise<NextResponse>} - The response object.
  */
 export async function POST(req: NextRequest): Promise<NextResponse> {
+  const { originalUrl, customAlias }: RequestPayload = await req.json();
+  const id = UrlMappings.generateShortId(customAlias);
+  const shorterUrl = `${req.nextUrl.protocol}//${req.nextUrl.host}/${id}`;
+
   try {
-    const { originalUrl, customAlias }: RequestPayload = await req.json();
-    const id = UrlMappings.generateShortId(customAlias);
-    const shorterUrl = `${req.nextUrl.protocol}//${req.nextUrl.host}/${id}`;
+    await dbConnect();
 
     // Check if the ID already exists
     const existingUrl: any = await Url.findOne({ shortId: id });
-    // const existingUrl = await fetch(`${urlsData}?shortId=${id}`).then((res) =>
-    //   res.json()
-    // );
-
-    UrlMappings.addUrlMapping(id, originalUrl);
 
     if (existingUrl?.originalUrl) {
       return NextResponse.json({
@@ -35,9 +33,15 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       });
     }
 
+    UrlMappings.addUrlMapping(id, originalUrl);
+
     const newUrl: any = new Url({ shortId: id, originalUrl });
 
     await newUrl.save();
+
+    // const existingUrl = await fetch(`${urlsData}?shortId=${id}`).then((res) =>
+    //   res.json()
+    // );
 
     // fetch(`${urlsData}`, {
     //   method: "POST",
@@ -52,6 +56,33 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       data: { shorterUrl, all: UrlMappings.getAllUrlMappings() },
     });
   } catch (error) {
-    return NextResponse.json({ error: error }, { status: 400 });
+    const existingUrl = await fetch(`${urlsData}?shortId=${id}`).then((res) =>
+      res.json()
+    );
+
+    if (existingUrl?.originalUrl) {
+      return NextResponse.json({
+        message: "Custom alias already in use",
+        data: { shorterUrl: null },
+      });
+    }
+
+    UrlMappings.addUrlMapping(id, originalUrl);
+
+    fetch(`${urlsData}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ shortId: id, originalUrl }),
+    }).then((res) => res.json());
+
+    return NextResponse.json({
+      message: "Done!",
+      success: true,
+      data: { shorterUrl },
+    });
+
+    return NextResponse.json({ error: error, success: false }, { status: 400 });
   }
 }

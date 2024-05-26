@@ -1,5 +1,6 @@
 import { UrlMappings } from "@/app/utils/urlMappings";
 import { urlsData } from "@/constants/app-script";
+import dbConnect from "@/lib/dbConnect";
 import Url from "@/models/Url";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -15,6 +16,8 @@ export async function GET(
   { params: { id } }: { params: { id: string } }
 ): Promise<NextResponse> {
   try {
+    await dbConnect();
+
     const cachedUrl = UrlMappings.getUrlMapping(id)?.originalUrl;
 
     if (cachedUrl) {
@@ -39,6 +42,18 @@ export async function GET(
 
     return NextResponse.json({ error: "URL not found" }, { status: 404 });
   } catch (error) {
+    const response = await fetch(`${urlsData}?shortId=${id}`);
+
+    if (!response.ok) {
+      return NextResponse.json({ error: "URL not found" }, { status: 404 });
+    }
+
+    const { originalUrl } = await response.json();
+
+    if (originalUrl) {
+      return NextResponse.redirect(originalUrl);
+    }
+
     console.error(error);
     return NextResponse.json(
       { error: "Internal Server Error" },
