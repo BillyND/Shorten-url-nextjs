@@ -1,15 +1,32 @@
 "use client";
 
-import { CheckCircleOutlined, ExportOutlined } from "@ant-design/icons";
-import { Divider, Flex } from "antd";
-import React from "react";
+import {
+  CheckCircleOutlined,
+  CheckOutlined,
+  CopyOutlined,
+  ExportOutlined,
+} from "@ant-design/icons";
+import { Button, Divider, Flex } from "antd";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 function ResultShorter(props: { shorterUrl: string; originalUrl: string }) {
+  const [isCopied, setIsCopied] = useState<boolean>(false);
   const { shorterUrl, originalUrl } = props;
   const { t } = useTranslation();
 
   if (!shorterUrl) return;
+
+  const handleCopy = () => {
+    if (isCopied) return;
+
+    setIsCopied(true);
+    navigator.clipboard.writeText(shorterUrl);
+
+    setTimeout(() => {
+      setIsCopied(false);
+    }, 1000);
+  };
 
   return (
     <Flex vertical className="result-shorter-url">
@@ -34,16 +51,34 @@ function ResultShorter(props: { shorterUrl: string; originalUrl: string }) {
 
       <Divider />
 
-      <Flex vertical gap={8}>
-        <b>{t("new_url_label")}</b>
-        <a className="url-result-shorted" href={shorterUrl} target="_blank">
-          {shorterUrl} <ExportOutlined />
-        </a>
+      <Flex justify="space-between">
+        <Flex vertical gap={8}>
+          <b>{t("new_url_label")}</b>
+          <a className="url-result-shorted" href={shorterUrl} target="_blank">
+            {shorterUrl} <ExportOutlined />
+          </a>
 
-        <Flex gap={4}>
-          <span className="count-character-number">{shorterUrl?.length}</span>
-          <span className="count-character-text">{t("character")}</span>
+          <Flex gap={4}>
+            <span className="count-character-number">{shorterUrl?.length}</span>
+            <span className="count-character-text">{t("character")}</span>
+          </Flex>
         </Flex>
+
+        <Button type="primary" danger ghost onClick={handleCopy}>
+          <Flex gap={4}>
+            {isCopied ? (
+              <>
+                <CheckOutlined />
+                {t("copied")}
+              </>
+            ) : (
+              <>
+                <CopyOutlined />
+                {t("copy")}
+              </>
+            )}
+          </Flex>
+        </Button>
       </Flex>
     </Flex>
   );

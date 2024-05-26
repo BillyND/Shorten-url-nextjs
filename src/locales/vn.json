@@ -6,5 +6,10 @@
   "api_error_message": "Đã xảy ra lỗi khi xử lý yêu cầu của bạn. Vui lòng thử lại sau.",
   "input_url_placeholder": "Nhập url",
   "input_custom_alias_placeholder": "Nhập bí danh tùy chỉnh",
-  "message_success_shorter_url": "URL mới của bạn đã được tạo thành công!"
+  "message_success_shorter_url": "URL mới của bạn đã được tạo thành công!",
+  "old_url_label": "Đường dẫn cũ",
+  "new_url_label": "Đường dẫn mới",
+  "character": "ký tự",
+  "copy": "Sao chép",
+  "copied": "Đã sao chép"
 }

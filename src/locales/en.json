@@ -9,5 +9,7 @@
   "message_success_shorter_url": "Your new URL has been created successfully!",
   "old_url_label": "Old URL",
   "new_url_label": "New URL",
-  "character": "character"
+  "character": "character",
+  "copy": "Copy",
+  "copied": "Copied"
 }
