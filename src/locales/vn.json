@@ -15,5 +15,6 @@
   "success_shorter_url": "Rút ngắn URL thành công!",
   "custom_alias_already_used": "Bí danh tùy chỉnh đã được sử dụng!",
   "error_server": "Lỗi máy chủ!",
-  "created_by": "Tạo bởi"
+  "created_by": "Tạo bởi",
+  "error_alias": "Alias chỉ nên chứa các chữ cái và chữ số"
 }

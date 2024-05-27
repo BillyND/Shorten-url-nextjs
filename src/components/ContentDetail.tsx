@@ -30,8 +30,18 @@ const ContentDetail: React.FC = () => {
   });
 
   const onFinish: FormProps<FieldType>["onFinish"] = async (values) => {
+    const { customAlias, originalUrl }: any = values;
+    const patternCheckSpecialCharacter = /[\s\W]/;
+
+    if (patternCheckSpecialCharacter.test(customAlias?.trim())) {
+      message.error(t("error_alias"));
+      return;
+    }
+
     setLoading(true);
-    setDataShorter((prev) => ({ ...prev, originalUrl: values.originalUrl }));
+    setDataShorter((prev) => ({ ...prev, originalUrl }));
+
+    console.log("===>values", values);
 
     try {
       const response = await fetch("/api/shorter-url", {
@@ -83,6 +93,7 @@ const ContentDetail: React.FC = () => {
           ]}
         >
           <Input
+            color="red"
             size="large"
             placeholder={t("input_url_placeholder")}
             autoComplete="url"

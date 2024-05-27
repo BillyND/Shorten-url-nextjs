@@ -15,5 +15,6 @@
   "success_shorter_url": "Shortened URL successfully!",
   "custom_alias_already_used": "Custom alias already in use!",
   "error_server": "Error server!",
-  "created_by": "Created by"
+  "created_by": "Created by",
+  "error_alias": "Alias should only contain letters and numbers"
 }

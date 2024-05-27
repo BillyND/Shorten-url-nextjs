@@ -113,7 +113,7 @@ function ResultShorter(props: { shorterUrl: string; originalUrl: string }) {
       <Flex id="shorter-url-qrcode" vertical gap={4}>
         <QRCodeResize shorterUrl={shorterUrl} />
 
-        <Button size="large" type="primary" danger onClick={downloadQRCode}>
+        <Button size="middle" type="primary" danger onClick={downloadQRCode}>
           <CloudDownloadOutlined /> {t("save")}
         </Button>
       </Flex>

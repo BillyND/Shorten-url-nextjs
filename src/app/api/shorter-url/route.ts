@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 type RequestPayload = {
   originalUrl: string;
-  customAlias: string;
+  customAlias?: string;
 };
 
 /**
@@ -16,25 +16,31 @@ type RequestPayload = {
  */
 export async function POST(req: NextRequest): Promise<NextResponse> {
   try {
-    await dbConnect();
     const { originalUrl, customAlias }: RequestPayload = await req.json();
-    const id = UrlMappings.generateShortId(customAlias);
+    const trimmedOriginalUrl = originalUrl.trim();
+    const trimmedCustomAlias = customAlias?.trim();
+
+    const id = UrlMappings.generateShortId(trimmedCustomAlias);
     const shorterUrl = `${req.nextUrl.protocol}//${req.nextUrl.host}/${id}`;
+    await dbConnect();
 
     // Check if the ID already exists
     const existingUrl = await Url.findOne({ shortId: id }).lean();
 
     if (existingUrl) {
-      return NextResponse.json({
-        success: false,
-        message: "custom_alias_already_used",
-        data: { shorterUrl: null },
-      });
+      return NextResponse.json(
+        {
+          success: false,
+          message: "custom_alias_already_used",
+          data: { shorterUrl: null },
+        },
+        { status: 409 }
+      );
     }
 
-    UrlMappings.addUrlMapping(id, originalUrl);
+    UrlMappings.addUrlMapping(id, trimmedOriginalUrl);
 
-    const newUrl = new Url({ shortId: id, originalUrl });
+    const newUrl = new Url({ shortId: id, originalUrl: trimmedOriginalUrl });
     await newUrl.save();
 
     return NextResponse.json({
@@ -46,7 +52,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     console.error("===> Error processing URL:", error);
     return NextResponse.json(
       { success: false, message: "error_server" },
-      { status: 400 }
+      { status: 500 }
     );
   }
 }
