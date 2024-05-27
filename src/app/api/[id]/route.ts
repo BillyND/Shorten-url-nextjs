@@ -15,7 +15,7 @@ export async function GET(
   { params: { id } }: { params: { id: string } }
 ): Promise<NextResponse> {
   try {
-    // await dbConnect();
+    await dbConnect();
 
     // Check cache for URL mapping
     const cachedUrl = UrlMappings.getUrlMapping(id);

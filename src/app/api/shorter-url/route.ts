@@ -16,6 +16,7 @@ type RequestPayload = {
  */
 export async function POST(req: NextRequest): Promise<NextResponse> {
   try {
+    await dbConnect();
     const { originalUrl, customAlias }: RequestPayload = await req.json();
     const id = UrlMappings.generateShortId(customAlias);
     const shorterUrl = `${req.nextUrl.protocol}//${req.nextUrl.host}/${id}`;
