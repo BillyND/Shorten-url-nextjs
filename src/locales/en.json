@@ -1,9 +1,9 @@
 {
   "custom_alias_label": "Custom alias (Optional)",
   "url_invalid_format": "URL does not have a valid format",
-  "url": "Url",
+  "url": "URL",
   "submit_form_shorter_url": "Submit",
-  "input_url_placeholder": "Enter the url",
+  "input_url_placeholder": "Enter the URL",
   "input_custom_alias_placeholder": "Enter custom alias",
   "message_success_shorter_url": "Your new URL has been created successfully!",
   "old_url_label": "Old URL",
@@ -12,7 +12,7 @@
   "copy": "Copy",
   "copied": "Copied",
   "save": "Save",
-  "success_shorter_url": "Shortened url successfully!",
+  "success_shorter_url": "Shortened URL successfully!",
   "custom_alias_already_used": "Custom alias already in use!",
   "error_server": "Error server!",
   "created_by": "Created by"

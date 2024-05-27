@@ -1,12 +1,10 @@
 "use client";
 
-import React, { Suspense, useEffect, useState } from "react";
 import i18n from "@/i18n";
 import { GlobalOutlined } from "@ant-design/icons";
 import { Flex, Skeleton, Switch } from "antd";
-import { useRouter, useSearchParams } from "next/navigation";
-import { debounce } from "@/lib/debounce";
-import { TIME_DELAY_SWITCH_LANGUAGE } from "@/constants/language";
+import { useSearchParams } from "next/navigation";
+import { Suspense, useEffect, useState } from "react";
 
 // Define language constants
 const LANGUAGES = {
@@ -16,16 +14,15 @@ const LANGUAGES = {
 
 type Language = (typeof LANGUAGES)[keyof typeof LANGUAGES];
 
-const SwitchLanguageComponent = () => {
+const LanguageSwitcherComponent = () => {
   const searchParams = useSearchParams();
-  const lang = searchParams.get("lang");
+  const urlLang = searchParams.get("lang");
 
-  const [currentLanguage, setCurrentLanguage] = useState<Language | null>(
-    lang as Language
+  const [currentLanguage, setCurrentLanguage] = useState<Language>(
+    (urlLang as Language) || LANGUAGES.EN
   );
 
-  // Change language and update URL
-  const setLanguage = (language: Language): void => {
+  const updateLanguageInUrl = (language: Language): void => {
     const params = new URLSearchParams(window.location.search);
     params.set("lang", language);
     i18n.changeLanguage(language);
@@ -33,24 +30,22 @@ const SwitchLanguageComponent = () => {
     const newUrl = `${window.location.pathname}?${params.toString()}${
       window.location.hash
     }`;
-
     window.history.pushState({}, "", newUrl);
   };
 
   useEffect(() => {
-    if (lang) {
-      setLanguage(lang as Language);
-      return;
+    if (urlLang) {
+      updateLanguageInUrl(urlLang as Language);
+    } else {
+      updateLanguageInUrl(LANGUAGES.EN);
     }
+  }, [urlLang]);
 
-    setLanguage(LANGUAGES.EN);
-  }, []);
-
-  const handleSwitchLanguage = () => {
+  const handleLanguageSwitch = () => {
     const newLanguage =
       currentLanguage === LANGUAGES.VN ? LANGUAGES.EN : LANGUAGES.VN;
     setCurrentLanguage(newLanguage);
-    setLanguage(newLanguage);
+    updateLanguageInUrl(newLanguage);
   };
 
   return (
@@ -58,17 +53,16 @@ const SwitchLanguageComponent = () => {
       <GlobalOutlined />
       <Switch
         checked={currentLanguage === LANGUAGES.VN}
-        onChange={handleSwitchLanguage}
+        onChange={handleLanguageSwitch}
         className="switch-language"
         checkedChildren={LANGUAGES.VN.toUpperCase()}
         unCheckedChildren={LANGUAGES.EN.toUpperCase()}
-        defaultChecked
       />
     </Flex>
   );
 };
 
-const SwitchLanguage = () => {
+const LanguageSwitcher = () => {
   return (
     <Suspense
       fallback={
@@ -79,14 +73,13 @@ const SwitchLanguage = () => {
             active={true}
             size={"small"}
             shape={"round"}
-            block={false}
           />
         </Flex>
       }
     >
-      <SwitchLanguageComponent />
+      <LanguageSwitcherComponent />
     </Suspense>
   );
 };
 
-export default SwitchLanguage;
+export default LanguageSwitcher;
