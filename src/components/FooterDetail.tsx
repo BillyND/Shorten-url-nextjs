@@ -1,15 +1,28 @@
-"use client";
-
+import { Flex } from "antd";
 import { Footer } from "antd/es/layout/layout";
-import React from "react";
-import { useTranslation } from "react-i18next";
+import { FacebookCircle, GithubCircle, InstagramCircle } from "./Icon";
+import Link from "next/link";
 
 function FooterDetail() {
-  const { t } = useTranslation();
+  const urlFacebookProfile: any = process.env.FACEBOOK_PROFILE;
+  const urlInstagramProfile: any = process.env.INSTAGRAM_PROFILE;
+  const urlGithubProfile: any = process.env.GITHUB_PROFILE;
 
   return (
     <Footer style={{ textAlign: "center", background: "transparent" }}>
-      ShorterUrls ©{new Date().getFullYear()} {t("created_by")} BillyND
+      <Flex justify="center" align="center" gap={10}>
+        <Link href={urlGithubProfile} target="_blank">
+          <GithubCircle className="cursor-pointer" />
+        </Link>
+
+        <Link href={urlFacebookProfile} target="_blank">
+          <FacebookCircle className="cursor-pointer" />
+        </Link>
+
+        <Link href={urlInstagramProfile} target="_blank">
+          <InstagramCircle className="cursor-pointer" />
+        </Link>
+      </Flex>
     </Footer>
   );
 }
