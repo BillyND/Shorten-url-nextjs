@@ -10,7 +10,7 @@ import Url from "@/models/Url";
  */
 export const getShortUrl = async (shortId: string): Promise<string | null> => {
   try {
-    await dbConnect();
+    // await dbConnect();
 
     // Check the in-memory cache first
     const cachedUrl = UrlMappings.getUrlMapping(shortId);

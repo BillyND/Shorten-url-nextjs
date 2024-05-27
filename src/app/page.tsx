@@ -4,10 +4,11 @@ import HeaderDetail from "@/components/HeaderDetail";
 import dbConnect from "@/lib/dbConnect";
 import { Flex, message } from "antd";
 
-// Ensure database connection when the application starts
-dbConnect();
+//  database connection when the application starts
 
-export default function Home() {
+export default async function Home() {
+  await dbConnect();
+
   return (
     <Flex vertical>
       <HeaderDetail />

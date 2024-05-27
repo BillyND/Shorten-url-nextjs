@@ -7,7 +7,7 @@ import {
   CopyOutlined,
   ExportOutlined,
 } from "@ant-design/icons";
-import { Button, Divider, Flex, QRCode } from "antd";
+import { Button, Divider, Flex } from "antd";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import QRCodeResize from "./QRCodeResize";
@@ -19,7 +19,7 @@ function ResultShorter(props: { shorterUrl: string; originalUrl: string }) {
   const refBannerSuccess = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    if (refBannerSuccess.current) {
+    if (refBannerSuccess?.current) {
       refBannerSuccess.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [shorterUrl]);
@@ -112,10 +112,6 @@ function ResultShorter(props: { shorterUrl: string; originalUrl: string }) {
 
       <Flex id="shorter-url-qrcode" vertical gap={4}>
         <QRCodeResize shorterUrl={shorterUrl} />
-        {/* <QRCode
-          size={Math.max(260, window.innerWidth - 128)}
-          value={shorterUrl || "-"}
-        /> */}
 
         <Button size="small" type="primary" danger onClick={downloadQRCode}>
           <CloudDownloadOutlined /> {t("save")}

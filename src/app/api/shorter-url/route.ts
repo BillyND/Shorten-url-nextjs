@@ -20,8 +20,6 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     const id = UrlMappings.generateShortId(customAlias);
     const shorterUrl = `${req.nextUrl.protocol}//${req.nextUrl.host}/${id}`;
 
-    await dbConnect();
-
     // Check if the ID already exists
     const existingUrl = await Url.findOne({ shortId: id }).lean();
 
