@@ -7,7 +7,7 @@ import { Suspense } from "react";
 
 const { Header } = Layout;
 
-const HeaderDetail = () => {
+const HeaderDetail: React.FC = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const lang = searchParams.get("lang");
@@ -33,8 +33,17 @@ const HeaderDetail = () => {
   return renderHeaderContent();
 };
 
-const HeaderDetailWrapper = () => (
-  <Suspense fallback={<HeaderDetail />}>
+const HeaderDetailWrapper: React.FC = () => (
+  <Suspense
+    fallback={
+      <Header className="sticky-header">
+        <Flex className="width-100-per" align="center">
+          <span className="width-100-per logo-shorter-url">ShorterUrls</span>
+          <SwitchLanguage />
+        </Flex>
+      </Header>
+    }
+  >
     <HeaderDetail />
   </Suspense>
 );
