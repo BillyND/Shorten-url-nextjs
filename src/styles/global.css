@@ -7,7 +7,7 @@
   );
   --padding-content: 0 16px;
   --min-height-body: 100dvh;
-  --height-content-detail: calc(100dvh - 130px);
+  --height-content-detail: calc(100dvh - 140px);
   --max-width-content: 500px;
   --background-sticky-header: transparent;
   --background-switch-language: #6fc06f;

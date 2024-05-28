@@ -41,8 +41,6 @@ const ContentDetail: React.FC = () => {
     setLoading(true);
     setDataShorter((prev) => ({ ...prev, originalUrl }));
 
-    console.log("===>values", values);
-
     try {
       const response = await fetch("/api/shorter-url", {
         method: "POST",
@@ -93,7 +91,6 @@ const ContentDetail: React.FC = () => {
           ]}
         >
           <Input
-            color="red"
             size="large"
             placeholder={t("input_url_placeholder")}
             autoComplete="url"

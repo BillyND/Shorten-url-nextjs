@@ -1,23 +1,30 @@
 import { getShortUrl } from "@/services/short-url-fetchers";
 import { permanentRedirect } from "next/navigation";
 
-type ShortIdPageProps = {
+interface ShortIdPageProps {
   params: {
     shortId: string;
   };
-};
+}
 
-export default async function ShortIdPage({ params }: ShortIdPageProps) {
-  let { shortId } = params;
+/**
+ * ShortIdPage function to handle redirection based on shortId.
+ *
+ * @param {ShortIdPageProps} props - The properties including params with shortId.
+ * @returns {Promise<void>} - Redirects to the long URL if found.
+ */
+export default async function ShortIdPage({
+  params,
+}: ShortIdPageProps): Promise<void> {
+  const { shortId } = params;
+
+  let shortUrl: any = await getShortUrl(shortId);
 
   try {
-    shortId = JSON.parse(shortId);
+    shortUrl = JSON.parse(shortUrl);
   } catch (error) {}
 
-  console.log("===>shortId", !!shortId);
-
-  if (shortId) {
-    const shortUrl: any = await getShortUrl(shortId);
+  if (shortUrl) {
     return permanentRedirect(shortUrl);
   }
 }
