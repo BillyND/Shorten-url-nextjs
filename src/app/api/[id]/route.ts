@@ -14,13 +14,14 @@ export async function GET(
   req: NextRequest,
   { params: { id } }: { params: { id: string } }
 ): Promise<NextResponse> {
-  try {
-    await dbConnect();
+  await dbConnect();
 
+  try {
+    console.log("===>here");
     // Check cache for URL mapping
     const cachedUrl = UrlMappings.getUrlMapping(id);
 
-    if (cachedUrl) {
+    if (cachedUrl?.originalUrl) {
       return NextResponse.redirect(cachedUrl.originalUrl);
     }
 
@@ -34,8 +35,11 @@ export async function GET(
     // URL not found response
     return NextResponse.json({ error: "URL not found" }, { status: 404 });
   } catch (error) {
-    console.error("Error fetching URL:", error);
+    console.error("===> Error fetching URL:", error);
 
-    return NextResponse.json({ error, success: false }, { status: 500 });
+    return NextResponse.json(
+      { error: "Internal server error", success: false },
+      { status: 500 }
+    );
   }
 }

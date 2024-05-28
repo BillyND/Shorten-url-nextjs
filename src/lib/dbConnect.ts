@@ -1,5 +1,6 @@
 import mongoose, { ConnectOptions, Mongoose } from "mongoose";
 import { Db } from "mongodb";
+import { NextResponse } from "next/server";
 
 const MONGODB_URI: string = process.env.MONGODB_URI || "";
 
@@ -15,6 +16,7 @@ let cached: { conn?: Mongoose; promise?: Promise<Mongoose> } = {};
 async function dbConnect(): Promise<Db> {
   if (cached.conn) {
     console.log("=> Exist database connection");
+
     return cached.conn.connection.db;
   }
 
