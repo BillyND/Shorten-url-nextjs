@@ -1,5 +1,5 @@
 import { UrlMappings } from "@/app/utils/urlMappings";
-import dbConnect from "@/lib/dbConnect";
+import "@/lib/dbConnect";
 import Url from "@/models/Url";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -14,8 +14,6 @@ export async function GET(
   req: NextRequest,
   { params: { id } }: { params: { id: string } }
 ): Promise<NextResponse> {
-  await dbConnect();
-
   try {
     console.log("===>here");
     // Check cache for URL mapping

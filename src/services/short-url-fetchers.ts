@@ -1,5 +1,5 @@
 import { UrlMappings } from "@/app/utils/urlMappings";
-import dbConnect from "@/lib/dbConnect";
+import "@/lib/dbConnect";
 import Url from "@/models/Url";
 
 /**
@@ -9,8 +9,6 @@ import Url from "@/models/Url";
  */
 export const getShortUrl = async (shortId: string): Promise<string | null> => {
   try {
-    await dbConnect();
-
     // Check the in-memory cache first
     const cachedUrl = UrlMappings.getUrlMapping(shortId);
 
